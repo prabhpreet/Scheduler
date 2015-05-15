@@ -1,0 +1,41 @@
+Implementation based on system clock OS modification
+
+Semaphores
+
+PWM_update()
+{
+}
+
+Load_Buffer()
+{
+	Load PWM values from external memory.
+	semaphore to halt updation
+	
+	SPI?
+}
+
+
+//Priority user inputs using interrupts
+User_input_set()
+{
+	
+}
+
+User output response()
+{
+
+}
+
+Signal processing()
+{
+	Enable signal processing for each sound
+	How? Multiply transfer function!
+		Generating multiple frequencies?
+}
+
+Mixer()
+{
+	//All sequences have to be mixed before the 1/40Khz time period!
+}
+
+

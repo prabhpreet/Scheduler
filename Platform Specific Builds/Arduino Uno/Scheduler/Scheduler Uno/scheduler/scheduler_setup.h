@@ -9,6 +9,7 @@
 #ifndef SCHEDULER_SETUP_H_
 #define SCHEDULER_SETUP_H_
 
+#define F_CPU 16000000
 #define DISPATCHER_LATENCY 0
 #define SETUP_MODE 1
 
@@ -22,7 +23,9 @@
 
 /*TIMER*/
 #define TIMER_PRESCALING_MODE 0x05 //See manual, Prescaler mode = 1024.
-
+#define TIMER_INTERRUPT TIMER0_OVF_vect
+/*UART*/
+#define BAUD 115200
 
 
 #endif /* SCHEDULER_SETUP_H_ */

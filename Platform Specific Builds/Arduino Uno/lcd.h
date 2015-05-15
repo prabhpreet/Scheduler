@@ -17,6 +17,7 @@ void lcd_wr_char(char);
 void lcd_line1();
 void lcd_line2();
 void lcd_string(char*);
+void lcd_cursor(char, char);
 
 unsigned int temp;
 unsigned int unit;

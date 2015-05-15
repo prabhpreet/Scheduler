@@ -70,7 +70,7 @@ void scheduler()
 		task = ready_queue_next();
 		
 		if(task == NULL && next_wait == NULL)
-		{	//lcd_string("ERROR");
+		{	//uart_println("ERROR");
 			break;
 		}			
 		if(next_wait != NULL)
@@ -79,7 +79,7 @@ void scheduler()
 		
 		scheduler_transition();
 	
-		//lcd_string("W");
+		//uart_println("W");
 	}
 }
 
@@ -94,7 +94,7 @@ void scheduler_transition()
 	
 	if(task == NULL)
 	{
-		//lcd_string("F");
+		//uart_println("F");
 		sei();
 		scheduler_nothing();
 	}
@@ -103,15 +103,15 @@ void scheduler_transition()
 		if(task->stack_pointer == task->pcb_end)
 		{
 			
-			//lcd_string("G");
+			//uart_println("G");
 			sei();
 			task->function();
-			//lcd_string("Z");
+			//uart_println("Z");
 		}
 		else
 		{
 			//cli();
-			//lcd_string("Y");
+			//uart_println("Y");
 			//if(characters == 14)
 			//{
 				//characters = 0;
@@ -120,7 +120,7 @@ void scheduler_transition()
 			//sei();
 			scheduler_restore_context();
 			//cli();
-			//lcd_string("H");
+			//uart_println("H");
 			//if(characters == 14)
 			//{
 				//characters = 0;
@@ -138,11 +138,11 @@ void scheduler_transition()
 	{
 		task->stack_pointer = task->pcb_end;
 		wait_queue_add(task);
-		//lcd_string("I");	
+		//uart_println("I");	
 	}
 	SP = scheduler_sp;
 	scheduler_restore_context();
-	//lcd_string("J");
+	//uart_println("J");
 	//sei();
 }
 

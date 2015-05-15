@@ -1,30 +1,13 @@
 /*
- * ready_queue.h
+ * scheduler_queue.c
  *
- * Created: 18-11-2014 18:02:49
+ * Created: 27-12-2014 10:14:43
  *  Author: Prabhpreet
- */ 
-
-
-#ifndef READY_QUEUE_H_
-#define READY_QUEUE_H_
-
-#include "lcd.h"
-#include "scheduler_setup.h"
-#include "scheduler_data_structures.h"
-#include "scheduler_queue_memory.h"
-#include "scheduler_queue_library.h"
-
+ */
+#include "scheduler_queue.h"
+ 
 queue ready_deadline, ready_no_deadline, wait;
 
-void scheduler_queue_init();
-void ready_queue_add(process*);
-void transfer_wait_ready();
-process* wait_queue_next();
-void ready_queue_sort();
-void wait_queue_add(process*);
-
-process* wait_queue_ready();
 
 void scheduler_queue_init()
 {
@@ -55,11 +38,10 @@ void ready_queue_add(process* t)
 		if(t->deadline <= clock)
 		{
 			t->deadline = t->deadline + t->period;
-			t->function();
-		}			
-		scheduler_queue_library_add_deadline(&ready_deadline, n);	
-	}	
-	
+		}
+		scheduler_queue_library_add_deadline(&ready_deadline, n);
+	}
+	uart_println("Process added");
 }
 //check
 process* ready_queue_next()
@@ -69,7 +51,7 @@ process* ready_queue_next()
 	if(ready_deadline.start == NULL)
 	{
 		if(ready_no_deadline.start == NULL)
-			return NULL;
+		return NULL;
 		else
 		{
 			i = scheduler_queue_library_remove(&ready_no_deadline);
@@ -100,9 +82,10 @@ void transfer_wait_ready()
 				r->deadline= r->deadline + r->period;
 			}
 			scheduler_queue_library_add_deadline(&ready_deadline, i);
+			uart_println("Transferred");
 		}
 		else
-			return;
+		return;
 	}
 
 }
@@ -112,19 +95,18 @@ void transfer_wait_ready()
 void wait_queue_add(process* q)
 {
 	queue_node *n;
-	if(!check(q->state,PERIODIC)) return;	 
+	if(!check(q->state,PERIODIC)) return;
 	n = scheduler_queue_memory_malloc();
 	if(n == NULL)
 	{
 		scheduler_error(halt, "Wait queue no space");
 	}
 	scheduler_queue_library_add_deadline(&wait, n);
+	uart_println("Process wait");
+	
 }
 
 process* wait_queue_next()
 {
 	return (wait.start == NULL)?NULL:wait.start->data;
-}	
-
-#endif /* READY_QUEUE_H_ */
-
+}

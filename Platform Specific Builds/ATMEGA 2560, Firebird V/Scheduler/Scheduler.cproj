@@ -172,10 +172,10 @@
     <Compile Include="scheduler_setup.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="scheduler_stack_memory.h">
+    <Compile Include="scheduler_timer.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="scheduler_timer.h">
+    <Compile Include="uart_library.h">
       <SubType>compile</SubType>
     </Compile>
     <None Include="src\asf.h">

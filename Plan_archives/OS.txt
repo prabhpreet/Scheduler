@@ -1,0 +1,66 @@
+Process
+{
+	function; //How?
+	deadline;
+	// priority;
+	periodic;
+	pcb_start, offset;
+}
+Global Process task; //Denotes current task. Really required?
+int clear_stack = FALSE;
+
+Earliest deadline first, premptive.
+	FCFS with deadline.
+
+Process NOP
+
+Scheduler()
+{
+	while(1)
+	{
+		disable_interrupts(); //Enter critical section
+		if(clear_stack)
+		{
+			SP = ram_end;
+		}
+		ready_queue_sort(); 
+		task = ready_queue_next(); //also allocates deadline to timer
+		if(task.pcb_start == NULL)
+		{
+			enable_interrupts(); //Get out of critical section
+			task.function();
+		}
+		else
+		{
+			Scheduler_load_and_clear_pcb(task.pcb_start);
+			enable_interrupts();
+			return;
+		}
+		
+	}
+}
+
+
+ISR_Timer()
+{
+	disable_interrupts();
+	ready_queue_add(task);
+	Scheduler_save_pcb(&task);  //From stack pointer to end, sp = ram_end
+	clear_stack = TRUE;
+	Scheduler();
+}
+---------------------------------
+ready_queue functions, algorithm
+
+Linked list data structure:
+	ready_queue_add(); //add queue
+	process* ready_queue_next();
+	ready_queue_sort(); //Circular queue sorting, according to scheduling algo
+--------------------------------
+
+Timer library
+
+scheduler_init();
+scheduler_timer_start(int);
+ISR timer();
+scheduler();

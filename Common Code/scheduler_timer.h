@@ -21,6 +21,9 @@
 void scheduler_timer_init();
 void scheduler_timer_stop();
 void scheduler_timer_set(time_t);
+
+char str[10];
+
 void scheduler_timer_init()
 {
 	cli();
@@ -53,21 +56,16 @@ ISR(TIMER0_OVF_vect)
 	{
 		//cli();
 		//lcd_cursor(2,1);
-		//lcd_string("T");
+		//uart_println("T");
 		if(task != NULL)
 		{
-			lcd_string("V");
+			sprintf(str, "Timer, exec time: %d", task->period);
+			uart_println(str);
 			ready_queue_add(task);
 			task->stack_pointer = SP;	
 		}
-		//lcd_string("U");
+		//uart_println("U");
 		SP = scheduler_sp;
-		characters++;
-		if(characters == 14)
-		{
-			characters = 0;
-			lcd_cursor(1,1);
-		}
 		compare = 0;
 		//sei();	
 	}

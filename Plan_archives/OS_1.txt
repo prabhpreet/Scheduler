@@ -1,0 +1,9 @@
+/*
+Scheduler_add_Process(Process, priority, deadline, periodic)
+{
+	pcb_start = NULL;
+	ready_queue_add();
+}
+
+Scheduler_destroy_Process(Process);
+*/

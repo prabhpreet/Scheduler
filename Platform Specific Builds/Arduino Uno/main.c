@@ -12,6 +12,7 @@
 #include "scheduler_data_structures.h"
 #include "scheduler_queue.h"
 #include "lcd.h"
+#include "uart_library.h"
 #include "scheduler.h"
 #include <stdio.h>
 
@@ -29,8 +30,10 @@ process run[4];
 
 int main(void)
 {
+	uart_init();
 	lcd_port_config();
 	lcd_init();
+	
 	characters = 0;
 	DDRJ = 0xFF;
 	PORTJ = 0x00;
@@ -67,12 +70,11 @@ int main(void)
 	if(!check(s->data->state, PERIODIC))
 	{
 		sprintf(st,"%x", s->data->state);
-		lcd_string(st);
+		uart_println(st);
 		
 	}
 	*/
-	lcd_string("R");
-	
+	uart_println("R");
 	scheduler_init(run, 3);
 	
 	/*clock = 0;
@@ -84,7 +86,7 @@ int main(void)
 	n->data->function();
 	for(n = wait.start; n != NULL; n = n->next)
 	n->data->function();
-	lcd_string("|");
+	uart_println("|");
 	
 	wait_queue_add(ready_queue_next());
 	
@@ -100,13 +102,13 @@ int main(void)
 	n->data->function();
 	for(n = wait.start; n != NULL; n = n->next)
 	n->data->function();
-	lcd_string("|");
+	uart_println("|");
 	
 	*/
 	scheduler();
 	
 	
-	lcd_string("Q");
+	uart_println("Q");
 	while(1);
 }
 
@@ -117,6 +119,7 @@ int p1()
 	char a[20]="1";
 	cli();
 	lcd_string(a);
+	uart_println(a);
 	characters++;
 	if(characters == 14)
 	{
@@ -132,6 +135,7 @@ int p2()
 	char b[20]="2";
 	cli();
 	lcd_string(b);
+	uart_println(b);
 	characters++;
 	if(characters == 14)
 	{
@@ -148,6 +152,7 @@ int p3()
 	cli();
 	char c[20]="3";
 	lcd_string(c);
+	uart_println(c);
 	characters++;
 	if(characters == 14)
 	{
@@ -163,6 +168,7 @@ int p4()
 	cli();
 	char c[20]="4";
 	lcd_string(c);
+	uart_println(c);
 	characters++;
 	if(characters == 14)
 	{
@@ -200,7 +206,7 @@ int p4()
 	//char string[10];
 	//lcd_home();
 	//sprintf(string, "%d.\n", SP);
-	//lcd_string(string);
+	//uart_println(string);
 	//stack_height();
 	//return 0;
 //}
@@ -210,7 +216,7 @@ void stack_height()
 	char string[10];
 	//lcd_cursor(2,1);
 	sprintf(string, "%d", SP);
-	//lcd_string(string);
+	//uart_println(string);
 }
 
 

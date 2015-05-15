@@ -1,22 +1,13 @@
 /*
- * scheduler_queue_library.h
+ * scheduler_queue_library.c
  *
- * Created: 02-12-2014 11:05:31
+ * Created: 27-12-2014 10:28:09
  *  Author: Prabhpreet
  */ 
+#include "scheduler_queue_library.h"
 
-
-#ifndef SCHEDULER_QUEUE_LIBRARY_H_
-#define SCHEDULER_QUEUE_LIBRARY_H_
-#include "scheduler_data_structures.h"
-#include "lcd.h"
-//FIFO queue
-void scheduler_queue_library_init(queue*);
-void scheduler_queue_library_add_end(queue*,queue_node*); //adds to end of queue
-void scheduler_queue_library_add_deadline(queue*, queue_node*); //adds to queue according to deadline
-void scheduler_queue_library_insert_after(queue*, queue_node*, queue_node*);
-void scheduler_queue_library_insert_before(queue*, queue_node*, queue_node*); //inserts queue node before a given queue node
-queue_node* scheduler_queue_library_remove(queue*);//removes node at start
+static void scheduler_queue_library_insert_after(queue*, queue_node*, queue_node*);
+static void scheduler_queue_library_insert_before(queue*, queue_node*, queue_node*); //inserts queue node before a given queue node
 
 void scheduler_queue_library_init(queue* q)
 {
@@ -86,7 +77,7 @@ void scheduler_queue_library_add_deadline(queue* q, queue_node* n)
 	}
 	scheduler_queue_library_insert_after(q,n,q->end);
 */
-	//lcd_string("E");
+	//uart_println("E");
 	//characters++;
 	//if(characters == 14)
 	//{
@@ -94,7 +85,7 @@ void scheduler_queue_library_add_deadline(queue* q, queue_node* n)
 		//lcd_cursor(1,1);
 	//}
 }
-void scheduler_queue_library_insert_after(queue* q, queue_node* n, queue_node* a)
+static void scheduler_queue_library_insert_after(queue* q, queue_node* n, queue_node* a)
 {
 	if(a == NULL) return;
 	
@@ -108,7 +99,7 @@ void scheduler_queue_library_insert_after(queue* q, queue_node* n, queue_node* a
 	}	
 }
 
-void scheduler_queue_library_insert_before(queue* q, queue_node* n, queue_node* b)
+static void scheduler_queue_library_insert_before(queue* q, queue_node* n, queue_node* b)
 {
 	if(b == NULL) return;
 	
@@ -134,4 +125,3 @@ queue_node* scheduler_queue_library_remove(queue* q)
 		q->start->prev = NULL;
 	return i;
 }
-#endif /* SCHEDULER_QUEUE_LIBRARY_H_ */

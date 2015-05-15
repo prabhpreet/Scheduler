@@ -1,0 +1,89 @@
+Process
+{
+	function; //How?
+	deadline;
+	// priority;
+	periodic;
+	pcb_start, offset;
+}
+Global Process task; //Denotes current task. Really required?
+Global Scheduler_SP;
+
+Earliest deadline first, premptive.
+	FCFS with deadline.
+
+Rules:
+* No periodic tasks should call any other function
+* All periodic functions should state their deadline
+* If deadline is -ve, then it means no deadline function!
+* Interrupts must not call any other function, call global variables (later include semaphores!)
+
+Scheduler_init()
+{
+	//Max stack space according to process type! (Calculation and optimization later on)
+	//Allocate stack space
+	//Calculate process pcb end
+	process.stack_pointer = process.pcb_end;
+	
+}
+
+Scheduler()
+{
+	while(1)
+	{
+		disable_interrupts(); //Enter critical section
+		ready_queue_sort(); 
+		task = ready_queue_next(); //also allocates deadline to timer
+		if(task.stack_pointer == task.pcb_end)
+		{
+			scheduler_transition();
+		}
+		else
+		{
+			scheduler_sp = SP;
+			SP = task.stack_pointer;
+			enable_interrupts();
+			return;
+		}
+	}
+}
+
+Scheduler_transition()
+{
+	scheduler_sp = SP;
+	SP = task.stack_pointer;
+	enable_interrupts(); //Get out of critical section
+	task.function();
+	disable_interrupts();
+	task->stack_pointer = SP;
+	ready_queue_add(task); //Existing deadline- give it value of next period
+	SP = scheduler_sp;
+	enable_interrupts();
+}
+
+ISR_Timer()
+{
+	disable_interrupts();
+	ready_queue_add(task);
+	task->stack_pointer = SP;  //From stack pointer to end, sp = ram_end
+	SP = scheduler_sp;
+}
+---------------------------------
+ready_queue functions, algorithm
+
+Linked list data structure:
+	ready_queue_add(); //add queue
+	process* ready_queue_next();
+	ready_queue_sort(); //Earliest deadline scheduling algorithm calculates nearest deadline
+--------------------------------
+
+waiting queue functions, algorithm
+	wait_queue_add(process*);
+	wait_queue_transfer(process**, int*);
+
+
+What about processes that have to wait? Till when should they wait and how do they get free?
+
+Timer library
+scheduler_timer_init();
+scheduler_time(int n);

@@ -1,0 +1,63 @@
+1. Serial stream library for debugging!
+	DONE!
+
+8. Library streamlining: C files and H files, static functions
+	DONE!
+	
+9. Scheduler Porting and Scheduler Context Switching
+		Accurate Timer
+	DONE!
+	
+3. Convert check, set, clear to macros
+	DONE!
+	
+2. Data structure for queues
+	-Deadline based
+		Operations: Insert
+		Minheap
+			Copy deadline over
+		Q-node: pointer + deadline
+			w_wait_deadline.h
+			q_deadline.h
+			//Same thing!
+			
+	-No deadline based FIFO array: circular queue with start = task.
+		As soon as task is over, start++;
+		
+		q_no_deadline.h
+			scheduler_q_n_d: Circular queue operations with process* array
+
+4. Scheduler usage revamp
+	Scheduler_init(): Initializes queue and nothing function.
+
+	Processes: add them by scheduler_process_add(function, time_t deadline, bool periodic) function
+		Return process id in int: Array reference
+		Creates process structure.
+		
+		#define MAX_PROCESS_STORAGE in setup
+		
+		Use scheduler_stack allocation library
+		Execution time doesn't right now in EDF.
+
+	scheduler_process_add()
+	{
+		
+	}
+
+	scheduler_process_remove(int pid)
+	{
+		//Free process
+	}
+	Calling scheduler function: Scheduler_init() part of it
+
+5. Memory management for processes and their stack pointers
+	MAX_STACK_SPACE for each process!
+		How to find?
+		Registers used * (Maximum function recursion/call + 1)
+		
+	Currently implementation: User defines stack space, helper function needs to be written.
+		Stack space allocation.
+
+6. Implementation of semaphores to interface interrupts
+
+7. Usage of smaller AVR for multithreading!
